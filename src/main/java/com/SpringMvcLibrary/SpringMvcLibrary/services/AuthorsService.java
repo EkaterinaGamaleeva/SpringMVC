@@ -5,6 +5,7 @@ package com.SpringMvcLibrary.SpringMvcLibrary.services;
 import com.SpringMvcLibrary.SpringMvcLibrary.models.Author;
 import com.SpringMvcLibrary.SpringMvcLibrary.models.Book;
 import com.SpringMvcLibrary.SpringMvcLibrary.repositories.AuthorsRepository;
+import com.SpringMvcLibrary.SpringMvcLibrary.response.AuthorsCreateException;
 import com.SpringMvcLibrary.SpringMvcLibrary.response.AuthorsNotFoundException;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +39,15 @@ public class AuthorsService {
 
     @Transactional
     public void save(Author author) {
-    authorsRepository.save(author);
+        authorsRepository.save(author);
+        authorsRepository.findById(author.getId()).orElseThrow(AuthorsCreateException::new);
     }
 
     @Transactional
     public void update(int id, Author updatedAuthor) {
         updatedAuthor.setId(id);
         authorsRepository.save(updatedAuthor);
+        authorsRepository.findById(updatedAuthor.getId()).orElseThrow(AuthorsNotFoundException::new);
     }
 
     @Transactional

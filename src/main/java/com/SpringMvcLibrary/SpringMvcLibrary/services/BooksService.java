@@ -4,7 +4,8 @@ package com.SpringMvcLibrary.SpringMvcLibrary.services;
 import com.SpringMvcLibrary.SpringMvcLibrary.models.Author;
 import com.SpringMvcLibrary.SpringMvcLibrary.models.Book;
 import com.SpringMvcLibrary.SpringMvcLibrary.repositories.BooksRepository;
-import com.SpringMvcLibrary.SpringMvcLibrary.response.AuthorsNotFoundException;
+import com.SpringMvcLibrary.SpringMvcLibrary.response.AuthorsCreateException;
+import com.SpringMvcLibrary.SpringMvcLibrary.response.BooksCreateException;
 import com.SpringMvcLibrary.SpringMvcLibrary.response.BooksNotFoundExcention;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,17 +27,17 @@ public class BooksService {
     }
 
     public List<Book> findAll(boolean sortByYear) {
-        if (sortByYear==true)
-            return booksRepository.findAll(Sort.by("year"));
-        else
-            return booksRepository.findAll();
+        return booksRepository.findAll(Sort.by("year"));
     }
 
     public List<Book> findWithPagination(Integer page, Integer booksPerPage, boolean sortByYear) {
-        if (sortByYear==true)
-            return booksRepository.findAll(PageRequest.of(page, booksPerPage,Sort.by("year"))).getContent();
-        else
-            return booksRepository.findAll(PageRequest.of(page, booksPerPage)).getContent();
+        if (sortByYear == true) {
+            PageRequest pageRequest = PageRequest.of(page, booksPerPage, Sort.by("year"));
+            return booksRepository.findAll(pageRequest).getContent();
+        } else {
+            PageRequest pageRequest2 = PageRequest.of(page, booksPerPage);
+            return booksRepository.findAll(pageRequest2).getContent();
+        }
     }
 
     public Book findOne(int id) {
@@ -52,6 +52,7 @@ public class BooksService {
     @Transactional
     public void save(Book book) {
         booksRepository.save(book);
+        booksRepository.findById(book.getId()).orElseThrow(BooksCreateException::new);
     }
 
     @Transactional
@@ -61,6 +62,7 @@ public class BooksService {
         updatedBook.setAuthorBooks(bookToBeUpdated.getAuthorBooks()); // чтобы не терялась связь при обновлении
 
         booksRepository.save(updatedBook);
+        booksRepository.findById(updatedBook.getId()).orElseThrow(BooksNotFoundExcention::new);
     }
 
     @Transactional
@@ -81,6 +83,9 @@ public class BooksService {
        if (booksRepository.findById(id).isPresent()){
            booksRepository.findById(id).get().setAuthorBooks(author);
        }
+    if (booksRepository.findById(id).get().getAuthorBooks()==null){
+        new BooksNotFoundExcention();
+    }
     }
 
 

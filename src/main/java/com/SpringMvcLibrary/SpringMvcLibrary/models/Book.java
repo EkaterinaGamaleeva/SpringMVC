@@ -39,8 +39,7 @@ public class Book {
     @Temporal(TemporalType.TIMESTAMP)
     private Date takenAt;
 
-    @Transient
-    private boolean expired; //  По-умолчанию false.
+//  По-умолчанию false.
     public Book() {
 
     }
@@ -108,11 +107,4 @@ public class Book {
         this.takenAt = takenAt;
     }
 
-    public boolean isExpired() {
-        return expired;
-    }
-
-    public void setExpired(boolean expired) {
-        this.expired = expired;
-    }
 }
