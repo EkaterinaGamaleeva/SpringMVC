@@ -7,11 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -21,10 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AuthorsController.class)
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-@ContextConfiguration(classes = {AuthorsController.class})
+@WebMvcTest(BooksController.class)
 public class BookControllerMockMvcUnitTest {
     @Autowired
     private MockMvc mockMvc;
@@ -42,15 +36,32 @@ public class BookControllerMockMvcUnitTest {
         Book book =new Book(1,"Первая",1987);
         List<Book> books=new ArrayList<>();
         books.add(book);
-        Mockito.when(this.service.findAll(true)).thenReturn(books);
-        mockMvc.perform(get("/books"))
+        Mockito.when(service.findAll(true)).thenReturn(books);
+     var a=   mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(book.getId()))
-                .andExpect(jsonPath("$.titleBook").value(book.getTitleBook()))
-                .andExpect(jsonPath("$.year").value(book.getYear()))
-                .andExpect( jsonPath("$.nameAuthor").value(book.getNameAuthor()))
-                .andExpect( jsonPath("$.authorBooks").value(book.getAuthorBooks()))
-                .andExpect( jsonPath("$.takenAt").value(book.getTakenAt()))
+                .andExpect(jsonPath("$[0].id").value(book.getId()))
+                .andExpect(jsonPath("$[0].titleBook").value(book.getTitleBook()))
+                .andExpect(jsonPath("$[0].year").value(book.getYear()))
+                .andExpect( jsonPath("$[0].nameAuthor").value(book.getNameAuthor()))
+                .andExpect( jsonPath("$[0].authorBooks").value(book.getAuthorBooks()))
+                .andExpect( jsonPath("$[0].takenAt").value(book.getTakenAt()))
                 .andReturn();
+        System.out.println(a.getResponse().getContentAsString());
+    }
+    @Test
+    public void getFindOne_ReturnsJsonNotInfoOrder()  throws Exception {
+        Book book =new Book(1,"Первая",1987);
+        List<Book> books=new ArrayList<>();
+        Mockito.when(service.findOne(1)).thenReturn(book);
+        var a=   mockMvc.perform(get("/books/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(book.getId()))
+                .andExpect(jsonPath("$[0].titleBook").value(book.getTitleBook()))
+                .andExpect(jsonPath("$[0].year").value(book.getYear()))
+                .andExpect( jsonPath("$[0].nameAuthor").value(book.getNameAuthor()))
+                .andExpect( jsonPath("$[0].authorBooks").value(book.getAuthorBooks()))
+                .andExpect( jsonPath("$[0].takenAt").value(book.getTakenAt()))
+                .andReturn();
+        System.out.println(a.getResponse().getContentAsString());
     }
 }

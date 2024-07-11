@@ -33,7 +33,8 @@ private final AuthorsService authorsService;
     @GetMapping
    //  List<Author>
     public ResponseEntity getFindAll() {
-        return new ResponseEntity<>(authorsService.findAll(),HttpStatus.OK);
+        return
+                new ResponseEntity<>(authorsService.findAll(),HttpStatus.OK);
     }
 
     @GetMapping("/books/{id}")

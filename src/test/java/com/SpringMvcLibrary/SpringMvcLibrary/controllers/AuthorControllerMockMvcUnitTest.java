@@ -23,11 +23,8 @@ import java.util.List;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-@WebMvcTest(BooksController.class)
-@AutoConfigureMockMvc
 @ActiveProfiles("test")
-@ContextConfiguration(classes = {BooksController.class})
+@WebMvcTest(AuthorsController.class)
 public class AuthorControllerMockMvcUnitTest {
     @Autowired
     private MockMvc mockMvc;
@@ -42,17 +39,34 @@ public class AuthorControllerMockMvcUnitTest {
     private AuthorsService service;
     @Test
     public void getUser_ReturnsJsonNotInfoOrder()  throws Exception {
-        Author author= new Author(3,"Гaмалеев Денис Олегович",2000);
+        Author author= new Author(1,"Гaмалеев Денис Олегович",2000);
 
         List<Author> authors = new ArrayList<>();
         authors.add(author);
-        Mockito.when(this.service.findAll()).thenReturn(authors);
-        mockMvc.perform(get("/authors"))
+        Mockito.when(service.findAll()).thenReturn(authors);
+       var a= mockMvc.perform(get("/authors"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(author.getId()))
-                .andExpect(jsonPath("$.fullName").value(author.getFullName()))
-                .andExpect(jsonPath("$.yearOfBirth").value(author.getYearOfBirth()))
-                .andExpect( jsonPath("$.books").value(author.getBooks()))
+                .andExpect(jsonPath("$[0].id").value(author.getId()))
+                .andExpect(jsonPath("$[0].fullName").value(author.getFullName()))
+                .andExpect(jsonPath("$[0].yearOfBirth").value(author.getYearOfBirth()))
+                .andExpect( jsonPath("$[0].books").value(author.getBooks()))
                 .andReturn();
+        System.out.println(a.getResponse().getContentAsString());
+    }
+    @Test
+    public void getFindOne_ReturnsJsonNotInfoOrder()  throws Exception {
+        Author author= new Author(1,"Гaмалеев Денис Олегович",2000);
+
+        List<Author> authors = new ArrayList<>();
+        authors.add(author);
+        Mockito.when(service.findOne(1)).thenReturn(author);
+        var a= mockMvc.perform(get("/authors/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(author.getId()))
+                .andExpect(jsonPath("$[0].fullName").value(author.getFullName()))
+                .andExpect(jsonPath("$[0].yearOfBirth").value(author.getYearOfBirth()))
+                .andExpect( jsonPath("$[0].books").value(author.getBooks()))
+                .andReturn();
+        System.out.println(a.getResponse().getContentAsString());
     }
 }

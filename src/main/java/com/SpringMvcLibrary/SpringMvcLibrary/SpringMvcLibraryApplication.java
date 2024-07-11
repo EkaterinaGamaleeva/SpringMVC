@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Profile("!test")
 @SpringBootApplication
-@EnableJpaRepositories()
-@EnableAutoConfiguration
 public class SpringMvcLibraryApplication {
 
 	public static void main(String[] args) {
