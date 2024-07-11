@@ -1,5 +1,6 @@
 package com.SpringMvcLibrary.SpringMvcLibrary.controllers;
 
+import com.SpringMvcLibrary.SpringMvcLibrary.models.Author;
 import com.SpringMvcLibrary.SpringMvcLibrary.models.Book;
 import com.SpringMvcLibrary.SpringMvcLibrary.repositories.BooksRepository;
 import com.SpringMvcLibrary.SpringMvcLibrary.services.BooksService;
@@ -9,12 +10,14 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,11 +35,23 @@ public class BookControllerMockMvcUnitTest {
     @MockBean
     private BooksService service;
     @Test
+    public void givenBooks_whenAdd_thenStatus201andPersonReturned() throws Exception {
+        Book book =new Book(1,"Первая",1987);
+        Mockito.when(repository.save(Mockito.any())).thenReturn(book);
+        mockMvc.perform(
+                        post("/books")
+                                .content(objectMapper.writeValueAsString(book))
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void getFindAll_ReturnsJsonNotSum()  throws Exception {
         Book book =new Book(1,"Первая",1987);
         List<Book> books=new ArrayList<>();
         books.add(book);
-        Mockito.when(service.findAll(false)).thenReturn(books);
+        Mockito.when(service.findAll(true)).thenReturn(books);
      var a=   mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(book.getId()))
