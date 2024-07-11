@@ -43,9 +43,14 @@ public class Book {
     public Book() {
 
     }
-    public Book(int i, String первая, int i1, Author author) {
 
+    public Book(int id, String titleBook, int year, String nameAuthor) {
+        this.id = id;
+        this.titleBook = titleBook;
+        this.year = year;
+        this.nameAuthor = nameAuthor;
     }
+
     public Book(int id, String titleBook, int year, String nameAuthor, Author authorBooks) {
         this.id = id;
         this.titleBook = titleBook;
@@ -53,6 +58,14 @@ public class Book {
         this.nameAuthor = nameAuthor;
         this.authorBooks = authorBooks;
     }
+    public Book(int id, String titleBook, int year, Author authorBooks) {
+        this.id = id;
+        this.titleBook = titleBook;
+        this.year = year;
+        this.nameAuthor = nameAuthor;
+        this.authorBooks = authorBooks;
+    }
+
     public Book(int id, String titleBook, int year) {
         this.id = id;
         this.titleBook = titleBook;

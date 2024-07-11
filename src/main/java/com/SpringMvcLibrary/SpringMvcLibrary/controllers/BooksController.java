@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 @RestController
@@ -36,7 +37,6 @@ public class BooksController {
     public ResponseEntity findAll(@RequestParam(value = "page", required = false) Integer page,
                                   @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
                                   @RequestParam(value = "sort_by_year", required = false) boolean sortByYear) {
-
         if (page == null || booksPerPage == null) {
             return new ResponseEntity<>(booksService.findAll(sortByYear), HttpStatus.OK);// выдача всех книг
         }

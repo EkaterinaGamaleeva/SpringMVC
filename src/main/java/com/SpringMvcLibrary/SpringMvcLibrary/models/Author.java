@@ -31,9 +31,12 @@ public class Author {
 
     }
 
-    public Author(int i, String s, int i1) {
-
+    public Author(int id, String fullName, int yearOfBirth) {
+        this.id = id;
+        this.fullName = fullName;
+        this.yearOfBirth = yearOfBirth;
     }
+
     public Author(int id, String fullName, int yearOfBirth, List<Book> books) {
         this.id = id;
         this.fullName = fullName;

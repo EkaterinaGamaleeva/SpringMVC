@@ -32,11 +32,11 @@ public class BookControllerMockMvcUnitTest {
     @MockBean
     private BooksService service;
     @Test
-    public void getUser_ReturnsJsonNotInfoOrder()  throws Exception {
+    public void getFindAll_ReturnsJsonNotSum()  throws Exception {
         Book book =new Book(1,"Первая",1987);
         List<Book> books=new ArrayList<>();
         books.add(book);
-        Mockito.when(service.findAll(true)).thenReturn(books);
+        Mockito.when(service.findAll(false)).thenReturn(books);
      var a=   mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(book.getId()))
@@ -49,7 +49,7 @@ public class BookControllerMockMvcUnitTest {
         System.out.println(a.getResponse().getContentAsString());
     }
     @Test
-    public void getFindOne_ReturnsJsonNotInfoOrder()  throws Exception {
+    public void getFindOne_ReturnsJsonYesSum()  throws Exception {
         Book book =new Book(1,"Первая",1987);
         List<Book> books=new ArrayList<>();
         Mockito.when(service.findOne(1)).thenReturn(book);
