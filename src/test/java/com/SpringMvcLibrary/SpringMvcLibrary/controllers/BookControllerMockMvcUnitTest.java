@@ -55,12 +55,12 @@ public class BookControllerMockMvcUnitTest {
         Mockito.when(service.findOne(1)).thenReturn(book);
         var a=   mockMvc.perform(get("/books/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(book.getId()))
-                .andExpect(jsonPath("$[0].titleBook").value(book.getTitleBook()))
-                .andExpect(jsonPath("$[0].year").value(book.getYear()))
-                .andExpect( jsonPath("$[0].nameAuthor").value(book.getNameAuthor()))
-                .andExpect( jsonPath("$[0].authorBooks").value(book.getAuthorBooks()))
-                .andExpect( jsonPath("$[0].takenAt").value(book.getTakenAt()))
+                .andExpect(jsonPath("$.id").value(book.getId()))
+                .andExpect(jsonPath("$.titleBook").value(book.getTitleBook()))
+                .andExpect(jsonPath("$.year").value(book.getYear()))
+                .andExpect( jsonPath("$.nameAuthor").value(book.getNameAuthor()))
+                .andExpect( jsonPath("$.authorBooks").value(book.getAuthorBooks()))
+                .andExpect( jsonPath("$.takenAt").value(book.getTakenAt()))
                 .andReturn();
         System.out.println(a.getResponse().getContentAsString());
     }

@@ -27,40 +27,40 @@ public class BooksController {
     @Autowired
     public BooksController(BooksService booksService) {
         this.booksService = booksService;
-        }
+    }
 
     @GetMapping("")
     public ResponseEntity findAll() {
-            return new ResponseEntity<>(this.booksService.findAll(true),HttpStatus.OK);
+        return new ResponseEntity<>(this.booksService.findAll(true), HttpStatus.OK);
     }
+
     @GetMapping("/{page}/{books_per_page}/{sort_by_year}")
     public ResponseEntity findAll(@RequestParam(value = "page", required = false) Integer page,
                                   @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
                                   @RequestParam(value = "sort_by_year", required = false) boolean sortByYear) {
         if (page == null || booksPerPage == null) {
             return new ResponseEntity<>(booksService.findAll(sortByYear), HttpStatus.OK);// выдача всех книг
-        }
-        else
+        } else
 
-            return new ResponseEntity<>( booksService.findWithPagination(page, booksPerPage, sortByYear),HttpStatus.OK);
+            return new ResponseEntity<>(booksService.findWithPagination(page, booksPerPage, sortByYear), HttpStatus.OK);
     }
 
 
     @GetMapping("/{id}")
     public ResponseEntity findOne(@PathVariable("id") int id) {
 
-        return new ResponseEntity<>( booksService.findOne(id),HttpStatus.OK);
+        return new ResponseEntity<>(booksService.findOne(id), HttpStatus.OK);
     }
 
 
     @PostMapping()
-    public ResponseEntity create( @RequestBody @Valid Book book, BindingResult bindingResult) {
+    public ResponseEntity create(@RequestBody @Valid Book book, BindingResult bindingResult) {
         booksService.save(book);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity update(@PathVariable("id") int id, @RequestBody @Valid Book book,BindingResult bindingResult) {
+    public ResponseEntity update(@PathVariable("id") int id, @RequestBody @Valid Book book, BindingResult bindingResult) {
         booksService.update(id, book);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -72,18 +72,18 @@ public class BooksController {
     }
 
     @PatchMapping("/{id}/asaAuthor")
-    public ResponseEntity asAuthor(@PathVariable("id") int id, @RequestBody @Valid Author author ,BindingResult bindingResult) {
+    public ResponseEntity asAuthor(@PathVariable("id") int id, @RequestBody @Valid Author author, BindingResult bindingResult) {
 
         Author authorBook = booksService.getBookAuthor(id);
         if (authorBook != null) {
         } else
             booksService.asAuthor(id, author);
-        return new ResponseEntity<>(booksService.findOne(id),HttpStatus.OK);
+        return new ResponseEntity<>(booksService.findOne(id), HttpStatus.OK);
     }
 
     @GetMapping("/{query}/search")
-    public ResponseEntity makeSearch(@PathVariable("query")  String query) {
-        return new ResponseEntity<>(booksService.searchByTitleBook(query),HttpStatus.OK);
+    public ResponseEntity makeSearch(@PathVariable("query") String query) {
+        return new ResponseEntity<>(booksService.searchByTitleBook(query), HttpStatus.OK);
     }
 
 

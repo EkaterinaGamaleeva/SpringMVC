@@ -5,12 +5,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.ToString;
 
 
 import java.util.List;
 
 @Entity
 @Table(name = "authors")
+@ToString
 public class Author {
     @Id
     @Column(name = "id")

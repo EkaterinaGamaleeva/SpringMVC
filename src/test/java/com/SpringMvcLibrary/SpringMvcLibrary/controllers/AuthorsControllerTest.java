@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 
@@ -43,7 +42,7 @@ class AuthorsControllerTest {
         var responseEntity = this.authorsController.getFindAll();
 
         assertNotNull(responseEntity);
-        assertEquals(authors, responseEntity.getBody());
+       assertEquals(authors, responseEntity.getBody());
     }
 
     @Test
@@ -78,14 +77,11 @@ class AuthorsControllerTest {
     }
 
     @Test
-    void create_ReturnHttpStatusCREATED() {
+    void create_ReturnHttpStatusCREATED() throws Exception {
         int id=1;
         Author author = new Author(id,"Гaмалеева Варвара Денисовна",2023);
-
         BindingResult bindingResult = new BeanPropertyBindingResult(author, "author");
-
-        var responseEntity = this.authorsController.create(author, bindingResult);
-
+        var responseEntity = authorsController.create(author);
         assertNotNull(responseEntity);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
     }

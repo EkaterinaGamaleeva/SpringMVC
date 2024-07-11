@@ -1,7 +1,6 @@
 package com.SpringMvcLibrary.SpringMvcLibrary.services;
 
 
-
 import com.SpringMvcLibrary.SpringMvcLibrary.models.Author;
 import com.SpringMvcLibrary.SpringMvcLibrary.models.Book;
 import com.SpringMvcLibrary.SpringMvcLibrary.repositories.AuthorsRepository;
@@ -21,14 +20,14 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class AuthorsService {
     private final AuthorsRepository authorsRepository;
-@Autowired
+
+    @Autowired
     public AuthorsService(AuthorsRepository authorsRepository) {
         this.authorsRepository = authorsRepository;
     }
 
 
-    public List<Author> findAll()
-    {
+    public List<Author> findAll() {
         return authorsRepository.findAll();
     }
 
@@ -61,12 +60,10 @@ public class AuthorsService {
 
     public List<Book> getBooksByPersonId(int id) {
         Optional<Author> author = authorsRepository.findById(id);
-
         if (author.isPresent()) {
             Hibernate.initialize(author.get().getBooks());
             return author.get().getBooks();
-        }
-        else {
+        } else {
             return Collections.emptyList();
         }
     }

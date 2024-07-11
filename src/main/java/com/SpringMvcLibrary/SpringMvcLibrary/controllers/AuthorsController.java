@@ -8,21 +8,27 @@ import com.SpringMvcLibrary.SpringMvcLibrary.services.AuthorsService;
 
 import com.SpringMvcLibrary.SpringMvcLibrary.util.AuthorsValidator;
 import jakarta.validation.Valid;
+import org.springframework.beans.PropertyEditorRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import java.beans.PropertyEditor;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
 @RequestMapping("/authors")
 public class AuthorsController {
-private final AuthorsValidator authorsValidator;
-private final AuthorsService authorsService;
+    private final AuthorsValidator authorsValidator;
+    private final AuthorsService authorsService;
+
     @Autowired
     public AuthorsController(AuthorsValidator authorsValidator, AuthorsService authorsService) {
         this.authorsValidator = authorsValidator;
@@ -31,25 +37,24 @@ private final AuthorsService authorsService;
 
 
     @GetMapping
-   //  List<Author>
+    //  List<Author>
     public ResponseEntity getFindAll() {
-        return
-                new ResponseEntity<>(authorsService.findAll(),HttpStatus.OK);
+        return new ResponseEntity<>(authorsService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/books/{id}")
     public ResponseEntity getBooksAll(@PathVariable("id") int id) {
-        return new ResponseEntity<>(authorsService.getBooksByPersonId(id),HttpStatus.OK);
+        return new ResponseEntity<>(authorsService.getBooksByPersonId(id), HttpStatus.OK);
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity  findOne(@PathVariable("id") int id) {
-        return new ResponseEntity<>(authorsService.findOne(id),HttpStatus.OK) ;
+    public ResponseEntity findOne(@PathVariable("id") int id) {
+        return new ResponseEntity<>(authorsService.findOne(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid Author author, BindingResult bindingResult) {
-    authorsValidator.validate(author,bindingResult);
-        authorsService.save(author);
+    public ResponseEntity<HttpStatus> create(@RequestBody @Valid Author author) throws Exception {
+                 authorsService.save(author);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

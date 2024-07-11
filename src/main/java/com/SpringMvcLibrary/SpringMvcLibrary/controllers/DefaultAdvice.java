@@ -17,8 +17,9 @@ public class DefaultAdvice {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
 
-        return  new ResponseEntity<>(ErrorResponse.create(e,HttpStatus.INTERNAL_SERVER_ERROR,"Ошибка на сервере"),HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(ErrorResponse.create(e, HttpStatus.INTERNAL_SERVER_ERROR, "Ошибка на сервере"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
     @ExceptionHandler
     private ResponseEntity<BooksErrorResponse> handlerException(BooksNotFoundExcention e) {
         BooksErrorResponse response = new BooksErrorResponse("Заказ с таким id не найдем", System.currentTimeMillis());
@@ -32,6 +33,7 @@ public class DefaultAdvice {
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler
     private ResponseEntity<AuthorsErrorResponse> handlerException(AuthorsNotFoundException e) {
         AuthorsErrorResponse response = new AuthorsErrorResponse("Заказ с таким id не найдем", System.currentTimeMillis());
