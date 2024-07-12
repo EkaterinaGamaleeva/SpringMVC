@@ -81,7 +81,7 @@ class AuthorsControllerTest {
         int id=1;
         Author author = new Author(id,"Гaмалеева Варвара Денисовна",2023);
         BindingResult bindingResult = new BeanPropertyBindingResult(author, "author");
-        var responseEntity = authorsController.create(author);
+        var responseEntity = authorsController.create(author,bindingResult);
         assertNotNull(responseEntity);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
     }

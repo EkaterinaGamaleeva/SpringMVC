@@ -54,6 +54,7 @@ public class BooksController {
 
 
     @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity create(@RequestBody @Valid Book book, BindingResult bindingResult) {
         booksService.save(book);
         return new ResponseEntity<>(HttpStatus.CREATED);

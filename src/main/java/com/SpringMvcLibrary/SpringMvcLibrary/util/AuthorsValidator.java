@@ -28,6 +28,11 @@ public class AuthorsValidator implements Validator {
         Author author = (Author) o;
         if (authorsService.getAuthorByFullName(author.getFullName()).isPresent()) {
             errors.rejectValue("fullName", "", "Человек с таким ФИО уже существует");
+            try {
+                throw  new Exception();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 }
 }

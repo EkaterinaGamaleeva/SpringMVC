@@ -8,19 +8,15 @@ import com.SpringMvcLibrary.SpringMvcLibrary.services.AuthorsService;
 
 import com.SpringMvcLibrary.SpringMvcLibrary.util.AuthorsValidator;
 import jakarta.validation.Valid;
-import org.springframework.beans.PropertyEditorRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
-import java.beans.PropertyEditor;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -53,8 +49,10 @@ public class AuthorsController {
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid Author author) throws Exception {
-                 authorsService.save(author);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<HttpStatus> create(@RequestBody @Valid Author author,BindingResult b) throws Exception {
+         authorsValidator.validate(author, b);
+        authorsService.save(author);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -62,6 +60,7 @@ public class AuthorsController {
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@RequestBody @Valid Author author, BindingResult bindingResult,
                                              @PathVariable("id") int id) {
+        authorsValidator.validate(author, bindingResult);
         authorsService.update(id, author);
         return ResponseEntity.ok(HttpStatus.OK);
     }

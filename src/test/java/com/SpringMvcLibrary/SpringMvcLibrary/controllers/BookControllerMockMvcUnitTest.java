@@ -29,21 +29,16 @@ public class BookControllerMockMvcUnitTest {
     private ObjectMapper objectMapper;
     @MockBean
     private BooksRepository repository;
-
-    @MockBean
-    private BooksController controller;
     @MockBean
     private BooksService service;
     @Test
     public void givenBooks_whenAdd_thenStatus201andPersonReturned() throws Exception {
         Book book =new Book(1,"Первая",1987);
         Mockito.when(repository.save(Mockito.any())).thenReturn(book);
-        mockMvc.perform(
-                        post("/books")
+        mockMvc.perform(post("/books")
                                 .content(objectMapper.writeValueAsString(book))
-                                .contentType(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(status().isOk());
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -60,8 +55,8 @@ public class BookControllerMockMvcUnitTest {
                 .andExpect( jsonPath("$[0].nameAuthor").value(book.getNameAuthor()))
                 .andExpect( jsonPath("$[0].authorBooks").value(book.getAuthorBooks()))
                 .andExpect( jsonPath("$[0].takenAt").value(book.getTakenAt()))
-                .andReturn();
-        System.out.println(a.getResponse().getContentAsString());
+                .
+             andReturn();
     }
     @Test
     public void getFindOne_ReturnsJsonYesSum()  throws Exception {
@@ -77,6 +72,5 @@ public class BookControllerMockMvcUnitTest {
                 .andExpect( jsonPath("$.authorBooks").value(book.getAuthorBooks()))
                 .andExpect( jsonPath("$.takenAt").value(book.getTakenAt()))
                 .andReturn();
-        System.out.println(a.getResponse().getContentAsString());
     }
 }
